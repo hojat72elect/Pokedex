@@ -22,15 +22,24 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavHostController
 import com.aa.android.pokedex.model.UiState
+import com.aa.android.pokedex.viewmodel.MainViewModel
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
+
+@Composable
+fun PokemonListScreen(viewModel: MainViewModel, navController: NavHostController) {
+    PokemonListScreen(
+        viewModel.pokemonLiveData,
+        navController
+    )
+}
 
 /**
  * Main Screen of the app.
  */
 @Composable
-fun PokemonListScreen(pokemon: LiveData<UiState<List<String>>>, navController: NavHostController) {
+private fun PokemonListScreen(pokemon: LiveData<UiState<List<String>>>, navController: NavHostController) {
     val uiState: UiState<List<String>>? by pokemon.observeAsState()
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),

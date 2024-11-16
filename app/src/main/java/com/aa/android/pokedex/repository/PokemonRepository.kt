@@ -1,11 +1,9 @@
 package com.aa.android.pokedex.repository
 
 import com.aa.android.pokedex.api.PokemonApi
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import com.aa.android.pokedex.api.entity.PokemonDTO
 import javax.inject.Inject
+import retrofit2.Retrofit
 
 class PokemonRepository @Inject constructor(retrofit: Retrofit) {
 
@@ -21,5 +19,13 @@ class PokemonRepository @Inject constructor(retrofit: Retrofit) {
             }
         }
         return listOf()
+    }
+
+    suspend fun getSinglePokemon(name: String): PokemonDTO? {
+        val response = api.getPokemon(name)
+        return if (response.isSuccessful)
+            response.body()
+        else
+            null
     }
 }

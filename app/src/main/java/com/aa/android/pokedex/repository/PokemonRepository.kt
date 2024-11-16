@@ -6,16 +6,21 @@ import javax.inject.Inject
 
 class PokemonRepository @Inject constructor(val api: PokemonApi) {
 
-    suspend fun getAllPokemon(): List<String> {
+    /**
+     * Returns a pair. First item of the pair is total number of pokemons that are available
+     * in API service. Second item of the pair is a list of first page of pokemons we have
+     * loaded from API service.
+     */
+    suspend fun getAllPokemon(): Pair<Int,List<String>> {
         val response = api.getAllPokemon()
         if (response.isSuccessful) {
             response.body()?.let {
-                return it.results.map { result ->
+                return Pair(it.count ,it.results.map { result ->
                     result.name
-                }
+                })
             }
         }
-        return listOf()
+        return Pair(0 ,listOf())
     }
 
     suspend fun getSinglePokemon(name: String): PokemonDTO? {

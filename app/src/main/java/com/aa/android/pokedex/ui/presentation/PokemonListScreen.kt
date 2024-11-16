@@ -1,6 +1,7 @@
 package com.aa.android.pokedex.ui.presentation
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -39,37 +40,42 @@ fun PokemonListScreen(viewModel: MainViewModel, navController: NavHostController
  * Main Screen of the app.
  */
 @Composable
-private fun PokemonListScreen(pokemon: LiveData<UiState<List<String>>>, navController: NavHostController) {
-    val uiState: UiState<List<String>>? by pokemon.observeAsState()
-    LazyColumn(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(vertical = 8.dp)
-    ) {
-        uiState?.let {
-            when (it) {
-                is UiState.Loading -> {
-                    items(20) {
-                        PokemonItem(pokemon = "", isLoading = true, navController)
-                    }
-                }
+private fun PokemonListScreen(pokemon: LiveData<UiState<Pair<Int, List<String>>>>, navController: NavHostController) {
+    val uiState: UiState<Pair<Int, List<String>>>? by pokemon.observeAsState()
+    Column {
+        val numPokemons = (uiState as? UiState.Ready<Pair<Int, List<String>>>)?.data?.first ?: 0
+        Text(text = "Total number of Pokemons : $numPokemons", modifier = Modifier.padding(start = 8.dp, top = 8.dp, bottom = 8.dp))
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = PaddingValues(vertical = 8.dp)
+        ) {
 
-                is UiState.Ready -> {
-                    items(it.data) { pkmn ->
-                        PokemonItem(pokemon = pkmn, isLoading = false, navController)
+            uiState?.let {
+                when (it) {
+                    is UiState.Loading -> {
+                        items(20) {
+                            PokemonItem(pokemon = "", isLoading = true, navController)
+                        }
                     }
-                }
 
-                is UiState.Error -> {
-                    item {
-                        Text(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 16.dp),
-                            textAlign = TextAlign.Center,
-                            text = "Error loading list. Please try again later.",
-                            color = MaterialTheme.colors.onBackground
-                        )
+                    is UiState.Ready -> {
+                        items(it.data.second) { pkmn ->
+                            PokemonItem(pokemon = pkmn, isLoading = false, navController)
+                        }
+                    }
+
+                    is UiState.Error -> {
+                        item {
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 16.dp),
+                                textAlign = TextAlign.Center,
+                                text = "Error loading list. Please try again later.",
+                                color = MaterialTheme.colors.onBackground
+                            )
+                        }
                     }
                 }
             }

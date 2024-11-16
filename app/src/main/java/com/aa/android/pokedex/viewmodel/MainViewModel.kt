@@ -13,7 +13,7 @@ import kotlinx.coroutines.Dispatchers
 @HiltViewModel
 class MainViewModel @Inject constructor(repository: PokemonRepository) : ViewModel() {
 
-    val pokemonLiveData: LiveData<UiState<List<String>>> = liveData(Dispatchers.IO) {
+    val pokemonLiveData: LiveData<UiState<Pair<Int, List<String>>>> = liveData(Dispatchers.IO) {
         emit(UiState.Loading())
         try {
             val data = repository.getAllPokemon()

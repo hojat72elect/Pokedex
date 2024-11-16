@@ -17,7 +17,9 @@ class DetailsViewModel @Inject constructor(retrofit: Retrofit): ViewModel()  {
 
     val repository = PokemonRepository(retrofit)
 
-    fun chosenPokemonLiveData(chosenPokemon:String): LiveData<UiState<PokemonDTO>> = liveData(Dispatchers.IO) {
+
+
+     fun getChosenPokemonLiveData(chosenPokemon:String): LiveData<UiState<PokemonDTO>> = liveData(Dispatchers.IO) {
         emit(UiState.Loading())
         try {
             val data = repository.getSinglePokemon(chosenPokemon)

@@ -10,14 +10,9 @@ import com.aa.android.pokedex.repository.PokemonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
-import retrofit2.Retrofit
 
 @HiltViewModel
-class DetailsViewModel @Inject constructor(retrofit: Retrofit): ViewModel()  {
-
-    val repository = PokemonRepository(retrofit)
-
-
+class DetailsViewModel @Inject constructor(private val repository: PokemonRepository) : ViewModel() {
 
      fun getChosenPokemonLiveData(chosenPokemon:String): LiveData<UiState<PokemonDTO>> = liveData(Dispatchers.IO) {
         emit(UiState.Loading())

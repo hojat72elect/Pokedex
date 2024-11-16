@@ -3,11 +3,8 @@ package com.aa.android.pokedex.repository
 import com.aa.android.pokedex.api.PokemonApi
 import com.aa.android.pokedex.api.entity.PokemonDTO
 import javax.inject.Inject
-import retrofit2.Retrofit
 
-class PokemonRepository @Inject constructor(retrofit: Retrofit) {
-
-    private val api: PokemonApi = retrofit.create(PokemonApi::class.java)
+class PokemonRepository @Inject constructor(val api: PokemonApi) {
 
     suspend fun getAllPokemon(): List<String> {
         val response = api.getAllPokemon()

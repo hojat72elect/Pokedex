@@ -1,5 +1,6 @@
 package com.aa.android.pokedex.di
 
+import com.aa.android.pokedex.api.PokemonApi
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -25,5 +26,10 @@ object NetworkModule {
             .baseUrl(baseUrl)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
+    }
+
+    @Provides
+    fun providePokemonApi(retrofit: Retrofit): PokemonApi {
+        return retrofit.create(PokemonApi::class.java)
     }
 }
